@@ -1,7 +1,7 @@
 import Server from './server';
+import ElasticSearchService from './services/elasticSearchService';
 
-import StubSearchService from './services/stubSearchService';
-const searchService = new StubSearchService();
+const searchService = new ElasticSearchService('http://localhost:9200', 'downloads');
 
 const app = new Server(searchService);
 

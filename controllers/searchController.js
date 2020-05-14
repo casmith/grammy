@@ -5,8 +5,9 @@ class SearchController {
     }
 
     search(req, res) {
-        return this.searchService.search()
-            .then(res.status(200).json([]));
+        return this.searchService.search(req.query.album)
+            .then(results => res.status(200)
+                .json(results));
     }
 }
 export default SearchController;
