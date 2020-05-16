@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import indexRoutes from './routes/indexRoutes.js';
 import searchRoutes from './routes/searchRoutes.js';
 
 function Server(searchService) {
@@ -9,8 +10,9 @@ function Server(searchService) {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     
-    app.use('/search', searchRoutes(searchService));
-
+    app.use('/index', indexRoutes(searchService));
+	app.use('/search', searchRoutes(searchService));
+    
     app.listen(port, () => console.log(`Server started on port ${port}`));
 
     return app;

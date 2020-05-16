@@ -18,3 +18,13 @@ describe('Search', () => {
         });
     });
 });
+
+describe('Index', () => {
+	describe('empty put request', () => {
+		it('returns a 200', () => {
+			return chai.request(app)
+				.put('/index')
+				.then(res => res.should.have.status(200));	
+		});
+	});
+});
