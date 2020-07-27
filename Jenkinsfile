@@ -18,7 +18,6 @@ pipeline {
             agent any
             steps{
                 script {
-                    sh 'ifconfig'
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
                     docker.withRegistry( '', registryCredential ) {
                         dockerImage.push()
