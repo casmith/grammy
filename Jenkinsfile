@@ -14,28 +14,16 @@ pipeline {
                 sh 'npm test'
             }
         }
-        stage('Building image') { 
+        stage('publish image') { 
             agent any
             steps{
                 script {
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                }
-            }
-        }
-        stage('Deploy Image') {
-            agent any
-            steps{
-                script {
                     docker.withRegistry( '', registryCredential ) {
                         dockerImage.push()
                     }
+                    sh "docker rmi $registry:$BUILD_NUMBER"
                 }
-            }
-        }
-        stage('Remove Unused docker image') {
-            agent any
-            steps {
-                sh "docker rmi $registry:$BUILD_NUMBER"
             }
         }
     }
