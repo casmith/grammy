@@ -1,0 +1,10 @@
+#!/bin/bash
+
+importFile=$1
+
+if [ $# -eq 0 ]; then 
+    echo "Not enough arguments"
+    exit -1
+fi
+
+node indexer.js $1 < $1
