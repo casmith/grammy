@@ -1,31 +1,30 @@
 'use strict';
 
+const read = require('stdio').read;
 const { Client } = require('@elastic/elasticsearch')
-const client = new Client({ node: 'http://localhost:9200' })
+const client = new Client({ node: 'http://192.168.10.129:9200' })
 const Accumulator = require('./accumulator');
-
-const fs = require('fs');
-const readline = require('readline');
-const lineReader = require('line-reader');
-const argv = process.argv.slice(2);
-const filename = argv[0] || 'example-list.txt';
-
 
 let isAlbum = false;
 let active = false;
 let doc = {};
+if (!process.argv[2]) {
+    throw new Error("Pass the filename as an argument");
+}
+const filename = process.argv[2].replace("\\", "/").split("/").pop();
 
 const isDocEmpty = doc => !Object.keys(doc).length;
 
-const accumulator = new Accumulator(100, items => {
-    const body = items.flatMap(doc => [{ index: { _index: 'downloads' } }, doc]);
-    return client.bulk({ refresh: true, body })
-        .then(() => process.stdout.write('.'));
+const accumulator = new Accumulator(300, items => {
+    const body = items.flatMap(doc => [{ index: { _index: 'downloads2' } }, doc]);
+    return Promise.resolve();//client.bulk({ refresh: false, body })
+        //.then(() => process.stdout.write('.'))
+        //.catch(e => console.log(e));
 });
 
 const encode = input => new Buffer(input).toString('base64');
 
-lineReader.eachLine(filename, (line, last) => {
+async function onLine (line) {
     if (line.includes("=====")) {
         isAlbum = !isAlbum;           
             active = true; 
@@ -33,40 +32,30 @@ lineReader.eachLine(filename, (line, last) => {
             if (!line.trim().length) {
                 active = false;
             if (!isDocEmpty(doc)) {
-                accumulator.add(doc);
-                if (last) {
-                    console.log('last!');
-                    accumulator.flush()
-                        .then(() => console.log(`processed ${accumulator.count} albums`));
-                }
+                await accumulator.add(doc);
             }
         } else if (isAlbum && active) {
             doc = {};
+            doc.filename = filename;
             doc.album = line;
             //doc._id = encode(doc.album);
         } else if (active) {
             if (!doc.tracks) {
                 doc.tracks = [];
+                doc.nick = line.split(" ")[0].substr(1);
             }
             doc.tracks.push(line);
         }
     }
+}
+
+read(onLine)
+  .then(() => {
+    return accumulator.flush()
+        .then(() => {
+            console.log();
+            console.log(`Pushed ${accumulator.successful} albums, failed ${accumulator.failed}`);
+        });
 });
-
-
-// client.indices.refresh({ index: 'downloads' }).then((x) => {
-//     console.log('refresh done')
-//     const result = client.search({
-//       index: 'downloads',
-//       body: {
-//         query: {
-//           match: { artist: 'absolution' }
-//         }
-//       }
-//     })
-//     .then(response => console.log(response.body.hits.hits[0]._source))
-//     .catch(response => console.log(response.body))    
-// });
-
 
 
