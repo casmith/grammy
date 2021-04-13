@@ -49,13 +49,13 @@ async function onLine (line) {
     }
 }
 
-read(onLine)
-  .then(() => {
-    return accumulator.flush()
+export default function () {
+    return read(onLine)
         .then(() => {
-            console.log();
-            console.log(`Pushed ${accumulator.successful} albums, failed ${accumulator.failed}`);
-        });
-});
-
-
+            return accumulator.flush()
+                .then(() => {
+                    console.log();
+                    console.log(`Pushed ${accumulator.successful} albums, failed ${accumulator.failed}`);
+                });
+        });  
+}

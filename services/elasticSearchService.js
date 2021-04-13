@@ -13,13 +13,24 @@ class ElasticSearchService {
                 from: 20,
                 size: 10,
                 body: {},
-                default_operator: 'AND', 
+               // default_operator: 'AND', 
                 q: query
             }, {
                 ignore: [404],
                 maxRetries: 3
             })
         .then(x => x.body.hits.hits.map(hit => hit._source))
+        .catch(e => console.log(JSON.stringify(e)));
+    }
+
+    deleteByQuery(query) {
+        return this.client.deleteByQuery({
+            index: this.index,
+            body: query,
+        }, {
+            ignore: [404],
+            maxRetries: 3
+        })
         .catch(e => console.log(JSON.stringify(e)));
     }
 }
