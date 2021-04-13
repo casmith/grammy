@@ -2,8 +2,9 @@ const exec = require('child_process').exec;
 
 class IndexController {
 
-    constructor(searchService) {
-    	this.searchService = searchService;
+    constructor(searchService, listIndexerService) {
+        this.searchService = searchService;
+        this.listIndexerService = listIndexerService;
     }
 
     submit(req, res) {
@@ -31,16 +32,7 @@ class IndexController {
 
     import({filename, nick}) {
     	console.log(`Importing list ${filename} for ${nick}`)
-    	return new Promise((resolve, reject) => {
-    		exec(`./import "${filename}"`, (error, stdout, stderr) => {
-	        	if (error !== null) {
-	            	return reject(error);
-	        	}
-	        	return resolve(stdout);
-	    	});	
-    	})
-    	 
-
+    	return this.listIndexerService.index(filename);
     }
 }
 export default IndexController;

@@ -1,8 +1,13 @@
 import Server from './server';
 import ElasticSearchService from './services/elasticSearchService';
+import listIndexerService from './services/listIndexerService';
 
-const searchService = new ElasticSearchService('http://192.168.10.3:9200', 'downloads');
+const elasticSearchBaseUrl = process.env.ES_BASE_URL || 'http://localhost:9200';
+const elasticSearchIndex = process.env.ES_INDEX || 'downloads';
 
-const app = new Server(searchService);
+const searchService = new ElasticSearchService(elasticSearchBaseUrl, elasticSearchIndex);
+const listIndexerService = new listIndexerService();
+
+const app = new Server(searchService, listIndexerService);
 
 export default app;

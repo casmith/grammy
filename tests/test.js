@@ -4,7 +4,10 @@ import Server from '../server';
 import StubSearchService from '../services/stubSearchService';
 
 const searchService = new StubSearchService();
-const app = new Server(searchService);
+const stubListIndexerService = {
+	index: () => Promise.resolve()
+}
+const app = new Server(searchService, stubListIndexerService);
 
 chai.use(chaiHttp);
 chai.should();
@@ -41,13 +44,12 @@ describe('Index', () => {
 				.then(res => res.should.have.status(400));	
 		});
 	});
-	// TODO: need to stub out the indexer to test this properly
-	// describe('put request with all required fields', () => {
-	// 	it('returns a 200', () => {
-	// 		return chai.request(app)
-	// 			.put('/index')
-	// 			.send({nick: "nick", filename: "filename"})
-	// 			.then(res => res.should.have.status(200));	
-	// 	});
-	// });
+	describe('put request with all required fields', () => {
+		it('returns a 200', () => {
+			return chai.request(app)
+				.put('/index')
+				.send({nick: "nick", filename: "filename"})
+				.then(res => res.should.have.status(200));	
+		});
+	});
 });
