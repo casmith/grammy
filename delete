@@ -1,0 +1,10 @@
+#!/bin/bash
+
+nick=$1
+
+if [ $# -eq 0 ]; then 
+    echo "Not enough arguments"
+    exit -1
+fi
+
+node delete.js $nick
