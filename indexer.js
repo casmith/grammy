@@ -16,7 +16,7 @@ const filename = process.argv[2].replace("\\", "/").split("/").pop();
 const isDocEmpty = doc => !Object.keys(doc).length;
 
 const accumulator = new Accumulator(300, items => {
-    const body = items.flatMap(doc => [{ index: { _index: 'downloads2' } }, doc]);
+    const body = items.flatMap(doc => [{ index: { _index: 'downloads' } }, doc]);
     return client.bulk({ refresh: false, body })
         .then(() => process.stdout.write('.'))
         .catch(e => console.log(e));
