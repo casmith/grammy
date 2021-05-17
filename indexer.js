@@ -25,7 +25,7 @@ const accumulator = new Accumulator(300, items => {
 const encode = input => new Buffer(input).toString('base64');
 
 async function onLine (line) {
-    if (line.includes("=====")) {
+    if (line.startsWith("=====")) {
         isAlbum = !isAlbum;           
             active = true; 
         } else {
