@@ -10,6 +10,7 @@ const deleteByQuery = (query) => {
         return client.deleteByQuery({
             index: elasticSearchIndex,
             body: query,
+            conflicts: 'proceed'
         }, {
             ignore: [404],
             maxRetries: 3
