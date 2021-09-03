@@ -22,7 +22,7 @@
           "@babel/cli": "^7.14.3",
           "@babel/core": "^7.14.6",
           "@babel/node": "^7.14.7",
-          "@babel/preset-env": "^7.14.7",
+          "@babel/preset-env": "^7.15.4",
           "chai": "^4.3.4",
           "chai-http": "^4.0.0",
           "mocha": "^8.4.0",
