@@ -13,7 +13,7 @@
           "@babel/register": "^7.16.5",
           "@elastic/elasticsearch": "^7.16.0",
           "body-parser": "^1.19.1",
-          "express": "^4.17.2",
+          "express": "^4.17.3",
           "line-reader": "^0.4.0",
           "lodash": "^4.17.21",
           "stdio": "^2.1.1"
