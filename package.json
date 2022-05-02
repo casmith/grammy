@@ -21,7 +21,7 @@
      "devDependencies": {
           "@babel/cli": "^7.16.0",
           "@babel/core": "^7.16.5",
-          "@babel/node": "^7.15.8",
+          "@babel/node": "^7.17.10",
           "@babel/preset-env": "^7.16.5",
           "chai": "^4.3.4",
           "chai-http": "^4.0.0",
