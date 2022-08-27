@@ -26,4 +26,8 @@ const nick = process.argv[2];
 
 console.log(`Deleting list entries for ${nick}`);
 deleteByQuery({query: {match: {nick}}})
-    .then(r => console.log(`deleted ${r.body.deleted} records`));
+    .then(r => {
+      if (r) 
+        console.log(`deleted ${r.body.deleted} records`);
+    }
+);
